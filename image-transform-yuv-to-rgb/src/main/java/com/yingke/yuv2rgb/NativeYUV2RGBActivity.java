@@ -91,7 +91,12 @@ public class NativeYUV2RGBActivity extends BaseActivity implements AssetsTask.Ca
 
     public void onRGB24ToYUV420P(View view) {
         String path = mTvRGB24Path.getText().toString();
+
         String yuv420pPath = FileUtil.getsExternalFilesPath() + "/" + "rgb24_to_yuv420p.yuv";
+        String yuv420pPath2 = FileUtil.getsExternalFilesPath() + "/" + "rgb24_to_yuv420p_kt.yuv";
+
+        Rgb_yuvKt.test(path, yuv420pPath2);
+
         FileUtil.createFile(yuv420pPath);
         NativeYUV2RGB.rgb2yuv(path, yuv420pPath, 510,510);
 
@@ -128,6 +133,5 @@ public class NativeYUV2RGBActivity extends BaseActivity implements AssetsTask.Ca
         mTvYuv420p.setText(filePaths[1]);
         mTvNV12.setText(filePaths[2]);
         mTvNV21.setText(filePaths[3]);
-
     }
 }

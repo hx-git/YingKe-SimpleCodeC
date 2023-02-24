@@ -77,7 +77,4 @@ dependencies {
 
     implementation project(path: ':ffmpeg-encode-camera-h264-mp4-jpeg')
 
-
-
-
 }

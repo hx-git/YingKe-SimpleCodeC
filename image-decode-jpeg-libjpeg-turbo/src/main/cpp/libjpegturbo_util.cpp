@@ -12,32 +12,33 @@
 #include <string.h>
 
 #include "logger.h"
+
 #define NUM_METHODS(x) ((int)(sizeof(x)/ sizeof(x[0])))
 
 /**
  * 关联方法
  */
 static JNINativeMethod methods[] = {
-        {"loadJPEGImage", "(Ljava/lang/String;Landroid/view/Surface;)V", (void *)loadJPEGImage},
+        {"loadJPEGImage", "(Ljava/lang/String;Landroid/view/Surface;)V", (void *) loadJPEGImage},
 };
 
 /**
  * 动态注册
  */
 extern "C" JNIEXPORT jint JNICALL
-JNI_OnLoad(JavaVM* jvm, void* reserved){
+JNI_OnLoad(JavaVM *jvm, void *reserved) {
 
     // JVM中获取 JNIEnv 环境变量
     JNIEnv *env = NULL;
-    if(JNI_OK != jvm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6)) {
+    if (JNI_OK != jvm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6)) {
         LOGE("Get JNIEnv failed");
         return JNI_ERR;
     }
 
     // 注册Native方法
     jclass clz = env->FindClass("com/yingke/libjpeg/turbo/LibJpegTurboUtil");
-    int  ret = env->RegisterNatives(clz, methods, NUM_METHODS(methods));
-    if (ret < 0){
+    int ret = env->RegisterNatives(clz, methods, NUM_METHODS(methods));
+    if (ret < 0) {
         return JNI_ERR;
     }
     return JNI_VERSION_1_6;
@@ -45,8 +46,8 @@ JNI_OnLoad(JavaVM* jvm, void* reserved){
 
 extern "C"
 JNIEXPORT void JNICALL
-JNI_OnUnload(JavaVM* jvm, void* reserved) {
-    if(jvm) {
+JNI_OnUnload(JavaVM *jvm, void *reserved) {
+    if (jvm) {
         jvm->DestroyJavaVM();
     }
 }
@@ -84,7 +85,7 @@ int drawJPEG(const char *jpeg_path, ANativeWindow_Buffer &nwBuffer) {
     jpegInfo.err = jpeg_std_error(&jpegError);
 
     // 6，读入jpeg文件
-    if ((input_file = fopen(jpeg_path, "rb")) == NULL){
+    if ((input_file = fopen(jpeg_path, "rb")) == NULL) {
         fprintf(stderr, "can't open %s\n", input_file);
         LOGE("open file error");
         return -1;
@@ -111,14 +112,14 @@ int drawJPEG(const char *jpeg_path, ANativeWindow_Buffer &nwBuffer) {
     memset(pixel, 0, row_width);
 
     // window buffer 的指针
-    uint32_t *line  = (uint32_t *)(nwBuffer.bits);
+    uint32_t *line = (uint32_t *) (nwBuffer.bits);
     for (int i = 0; i < jpegInfo.output_height; i++) {
         // 读取一行rgb数据 存在buffer
         jpeg_read_scanlines(&jpegInfo, buffer, 1);
         // 一行数据的起始地址
         pixel = *buffer;
 
-        for (int j = 0; j < jpegInfo.output_width ; j++) {
+        for (int j = 0; j < jpegInfo.output_width; j++) {
             // 存储顺序为BGR,BGR,BGR......
             line[j] = ((uint32_t) pixel[3 * j + 2]) << 16
                       | ((uint32_t) pixel[3 * j + 1] << 8)
@@ -128,15 +129,15 @@ int drawJPEG(const char *jpeg_path, ANativeWindow_Buffer &nwBuffer) {
         line = line + nwBuffer.stride;
     }
 
-    // 释放
-    free(pixel);
+    // 这里释放崩溃
+    // free(pixel);
+
     // 完成解压
     jpeg_finish_decompress(&jpegInfo);
     // 销毁解压信息
     jpeg_destroy_decompress(&jpegInfo);
     // 关闭文件句柄
     fclose(input_file);
-
     return 0;
 }
 

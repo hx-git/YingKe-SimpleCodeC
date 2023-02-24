@@ -305,7 +305,7 @@ unsigned char ClipValue(unsigned char x, unsigned char min_val, unsigned char ma
  * @param yuv420p
  */
 void RGB24_TO_YUV420P(unsigned char *rgb24, unsigned char *yuv420p, int width, int height) {
-
+    clock_t start_time = clock();
     unsigned char *ptrY, *ptrU, *ptrV;
     memset(yuv420p, 0, width * height * 3 / 2);
     // Y 开始地址
@@ -329,7 +329,6 @@ void RGB24_TO_YUV420P(unsigned char *rgb24, unsigned char *yuv420p, int width, i
             y = (unsigned char) ((66 * r + 129 * g + 25 * b + 128) >> 8) + 16;
             u = (unsigned char) ((-38 * r - 74 * g + 112 * b + 128) >> 8) + 128;
             v = (unsigned char) ((112 * r - 94 * g - 18 * b + 128) >> 8) + 128;
-
             // 采样 每个4个y，共用一组u，v分量
             // 全部y
             *(ptrY++) = ClipValue(y, 0, 255);
@@ -343,6 +342,7 @@ void RGB24_TO_YUV420P(unsigned char *rgb24, unsigned char *yuv420p, int width, i
 
         }
     }
+    LOGI("耗时 %d", calc_time(start_time));
 }
 
 

@@ -144,7 +144,7 @@ void encodeH264Start(JNIEnv *jniEnv, jclass thiz, jstring h264Path, jint width, 
     if (h264Encoder == NULL) {
         h264Encoder = new H264Encoder();
     }
-    // 仅实力化，在Preview中 编码
+    // 仅实例化，在Preview中 编码
     h264Encoder->initEncoder(h264_path, width, height);
     h264Encoder->encodeStart();
 

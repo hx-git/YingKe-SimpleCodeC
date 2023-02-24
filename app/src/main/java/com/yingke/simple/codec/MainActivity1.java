@@ -110,6 +110,14 @@ public class MainActivity1 extends BaseActivity {
             }
         });
 
+        textView11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EncodeMp4JpegActivity.start(MainActivity1.this);
+            }
+        });
+
+        // 图像 yuv-rgb
         textView06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,13 +149,6 @@ public class MainActivity1 extends BaseActivity {
             @Override
             public void onClick(View v) {
                 YuvJpegPngActivity.start(MainActivity1.this);
-            }
-        });
-
-        textView11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EncodeMp4JpegActivity.start(MainActivity1.this);
             }
         });
 

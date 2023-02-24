@@ -3,6 +3,7 @@
 //
 
 #include "jni.h"
+#include <ctime>
 #ifndef YINGKE_SIMPLECODEC_NATIVE_YUV2RGB_H
 #define YINGKE_SIMPLECODEC_NATIVE_YUV2RGB_H
 #ifdef __cplusplus
@@ -17,6 +18,11 @@ JNIEXPORT void JNICALL rgb2yuv(JNIEnv *env,
                                jstring yuv420pPath,
                                jint width,
                                jint height);
+
+
+inline int calc_time(clock_t start) {
+    return (int) (1000 * (clock() - start) / CLOCKS_PER_SEC);
+}
 
 #ifdef __cplusplus
 }
